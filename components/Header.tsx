@@ -56,7 +56,7 @@ const Home: NextPage = () => {
             }}
             className="flex fixed inset-x-0 shadow-md backdrop-blur-md h-20"
           >
-            <div className="mx-auto flex w-full items-center justify-between px-8">
+            <div className="mx-auto flex max-w-7xl px-4 w-full items-center justify-between ">
               <motion.p
                 style={{ scale }}
                 className="flex origin-left items-center text-xl font-semibold uppercase"

@@ -28,7 +28,7 @@ const Personal = () => {
 
             </div>
 
-            <div className="flex flex-col items-center justify-center md:col-span-2 w-full">
+            <div className="flex flex-col items-center justify-center col-span-4  md:col-span-2 w-full">
               <Image
                 src="/images/square.jpg"
                 width={408}

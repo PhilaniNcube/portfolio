@@ -8,6 +8,7 @@ import { Fragment } from 'react'
 import Hero from "../components/Personal";
 import Main from '../components/Main';
 import Personal from '../components/Personal';
+import Timeline from '../components/Timeline';
 
 
 
@@ -23,6 +24,7 @@ const Home: NextPage = () => {
       </Head>
       <Main />
       <Personal />
+      <Timeline />
     </Fragment>
   );
 }

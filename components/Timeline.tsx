@@ -7,11 +7,60 @@ import {
   DiReact,
 } from "react-icons/di";
 import { TbApi } from "react-icons/tb";
-import { SiTypescript, SiPostgresql } from "react-icons/si";
+import { SiTypescript, SiPostgresql, SiMongodb, SiApollographql } from "react-icons/si";
 import { RiPlayMiniFill } from "react-icons/ri";
+import {
+  useInView,
+  useScroll,
+  motion,
+  useMotionValue,
+  useTransform,
+  useMotionTemplate,
+} from "framer-motion";
+import { MutableRefObject, RefObject, useEffect, useRef, useState } from "react";
+import TimelineItem from "./TimelineItem";
+
+
+
+
+
+
+let clamp = (number: number, min: number, max: number) =>
+  Math.min(Math.max(number, min), max);
+
+function useBoundedScroll(bounds: number) {
+  let { scrollY } = useScroll();
+  let scrollYBounded = useMotionValue(0);
+  let scrollYBoundedProgress = useTransform(
+    scrollYBounded,
+    [0, bounds],
+    [0, 1]
+  );
+
+  useEffect(() => {
+    return scrollY.onChange((current) => {
+      let previous = scrollY.getPrevious();
+      let diff = current - previous;
+      let newScrollYBounded = scrollYBounded.get() - diff;
+
+      scrollYBounded.set(clamp(newScrollYBounded, 0, bounds));
+    });
+  }, [bounds, scrollY, scrollYBounded]);
+
+  return { scrollYBounded, scrollYBoundedProgress };
+}
+
+export type TimelineType = {
+  id: number;
+  date: string;
+  technology: string;
+  details: string;
+  icon: JSX.Element[];
+}
+
 
 const Timeline = () => {
-  const myTimeline = [
+  const myTimeline: TimelineType[] = [
     {
       id: 1,
       date: "2016 - 2017",
@@ -46,12 +95,13 @@ const Timeline = () => {
     {
       id: 4,
       date: "2020 - 2022",
-      technology: "React, REST APIs",
+      technology: "React, REST APIs, GraphQL",
       details:
         "At this point I started freelancing and the Covid19 hit which and the Bookstore I used to work for since 2014 closed down. There I went full-time as a freelancer. The first project I took was create a React based ecommerce store that served the same customers as the University Bookstore I used to work for. In working as a freelancer I started working with different REST APIs like SendGrid, Mailchimp & MongoDB",
       icon: [
         <DiReact className="h-6 w-6 text-blue-600" />,
         <TbApi className="h-6 w-6 text-blue-600" />,
+        <SiApollographql className="h-6 w-6 text-blue-600" />,
       ],
     },
     {
@@ -63,34 +113,22 @@ const Timeline = () => {
       icon: [
         <SiTypescript className="h-6 w-6 text-blue-600" />,
         <SiPostgresql className="h-6 w-6 text-blue-600" />,
+        <SiMongodb className="h-6 w-6 text-blue-600" />,
       ],
     },
   ];
 
+  const container : MutableRefObject<HTMLElement | null> = useRef(null);
+
   return (
-    <section className="py-8">
+    <section ref={container} className="py-8">
       <div className="max-w-7xl mx-auto px-4">
         <h2 className="text-2xl md:text-3xl text-blue-600 font-medium text-center">
           My Web Development Journey
         </h2>
-        <div className="mt-4 gap-3 max-w-4xl mx-auto">
-          {myTimeline.map((item) => (
-            <div
-              key={item.id}
-              className="odd:clear-right odd:float-left even:float-right even:clear-left w-full md:w-2/3 my-8 bg-slate-100 rounded-lg shadow-lg p-4"
-            >
-              <h3 className="text-xl font-serif flex items-center space-x-4 text-slate-600 font-bold">
-                <span className="pr-2">{item.technology}</span> <RiPlayMiniFill className="h-4 w-4" /> {item.date}
-              </h3>
-              <p className="font-mono mt-1 text-slate-800 text-base">
-                {item.details}
-              </p>
-              <div className="flex space-x-3 mt-2">
-                {item.icon.map((icon, i) => (
-                  <div key={i}>{icon}</div>
-                ))}
-              </div>
-            </div>
+        <div className="mt-4 gap-3 max-w-4xl mx-auto overflow-x-hidden">
+          {myTimeline?.map((item, i) => (
+            <TimelineItem key={item.id} item={item} index={i} />
           ))}
         </div>
       </div>

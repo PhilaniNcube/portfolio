@@ -6,13 +6,14 @@ import {
   useMotionTemplate,
 } from "framer-motion";
 import type { NextPage } from "next";
+import Link from "next/link";
 import { useEffect } from "react";
 import { Fragment } from "react";
 
-let clamp = (number: number, min: number, max: number) =>
+export let clamp = (number: number, min: number, max: number) =>
   Math.min(Math.max(number, min), max);
 
-function useBoundedScroll(bounds: number) {
+export function useBoundedScroll(bounds: number) {
   let { scrollY } = useScroll();
   let scrollYBounded = useMotionValue(0);
   let scrollYBoundedProgress = useTransform(
@@ -62,7 +63,7 @@ const Home: NextPage = () => {
                 className="flex origin-left items-center text-xl font-semibold uppercase"
               >
 
-                <span className="-ml-1 text-2xl tracking-[-.075em]">
+                <span className="-ml-1 text-xl tracking-[-.075em]">
                   Philani Ncube
                 </span>
               </motion.p>
@@ -70,9 +71,9 @@ const Home: NextPage = () => {
                 style={{ opacity }}
                 className="flex space-x-4 text-xs font-medium text-slate-400"
               >
-                <a href="#">News</a>
-                <a href="#">Sports</a>
-                <a href="#">Culture</a>
+                <Link href="/#journey">Journey</Link>
+                <Link href="/projects">Projects</Link>
+                <Link href="/contact">Contact</Link>
               </motion.nav>
             </div>
           </motion.header>

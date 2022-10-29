@@ -121,7 +121,7 @@ const Timeline = () => {
   const container : MutableRefObject<HTMLElement | null> = useRef(null);
 
   return (
-    <section ref={container} className="py-8">
+    <section ref={container} className="py-8 mt-24" id="journey">
       <div className="max-w-7xl mx-auto px-4">
         <h2 className="text-2xl md:text-3xl text-blue-600 font-medium text-center">
           My Web Development Journey

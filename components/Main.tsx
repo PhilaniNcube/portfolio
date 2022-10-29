@@ -21,10 +21,11 @@ const Main = () => {
           not, only in helping my clients reach new customers, but I help
           educate them on the opportunities that the web can provide them.
         </p>
-
-        <button className="max-w-xs font-bold rounded bg-blue-600 hover:bg-blue-700 cursor-pointer text-white py-2 mt-2">
+        <Link href="/projects">
+        <button className="max-w-xs w-md px-10 font-bold font-mono rounded bg-blue-600 hover:bg-blue-700 cursor-pointer text-white py-2 mt-2">
           My Projects
         </button>
+        </Link>
 
         <div className="flex mt-4 max-w-sm justify-start items-center">
           <Link

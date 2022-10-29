@@ -1,6 +1,8 @@
 import { motion, useScroll } from "framer-motion";
 import { useEffect, useRef } from "react";
+import { clamp, useBoundedScroll } from "./Header";
 import { TimelineType } from "./Timeline";
+
 
 type ComponentProps = {
   item: TimelineType,
@@ -9,19 +11,33 @@ type ComponentProps = {
 
 const TimelineItem = ({item, index}:ComponentProps) => {
 
-  const { scrollY, scrollYProgress } = useScroll();
+  let { scrollYBoundedProgress, scrollYBounded } = useBoundedScroll(100);
 
-  console.log({index})
 
- const itemRef = useRef(null)
 
- console.log(`Item ${index + 1}: ${itemRef}`)
+  const itemRef = useRef(null)
 
- useEffect(() => {
-   return scrollY.onChange((latest) => {
-     console.log(`Page scroll on item: ${index}`, latest, scrollYProgress);
-   });
- }, []);
+  const { scrollY, scrollYProgress } = useScroll({
+    target: itemRef,
+    offset: ["start end", "end end"],
+  });
+
+
+
+  useEffect(() => {
+    let yProgress = scrollYBounded.get();
+    console.log(scrollYProgress.get());
+
+    console.log(yProgress);
+  }, [scrollYProgress]);
+
+
+
+//  useEffect(() => {
+//    return scrollY.onChange((latest) => {
+//      console.log(`Page scroll on item: ${index}`, latest);
+//    });
+//  }, []);
 
   return (
     <motion.div

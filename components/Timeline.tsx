@@ -8,7 +8,6 @@ import {
 } from "react-icons/di";
 import { TbApi } from "react-icons/tb";
 import { SiTypescript, SiPostgresql, SiMongodb, SiApollographql } from "react-icons/si";
-import { RiPlayMiniFill } from "react-icons/ri";
 import {
   useInView,
   useScroll,

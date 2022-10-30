@@ -6,9 +6,11 @@
     "start": "next start"
   },
   "dependencies": {
+    "@analytics/google-tag-manager": "^0.5.2",
     "@headlessui/react": "^1.7.3",
     "@heroicons/react": "^2.0.12",
     "@next/font": "^13.0.0",
+    "analytics": "^0.8.1",
     "eslint-config-next": "^13.0.0",
     "framer-motion": "^7.6.1",
     "gsap": "^3.11.3",

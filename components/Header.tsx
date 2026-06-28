@@ -1,86 +1,52 @@
-import {
-  useScroll,
-  motion,
-  useMotionValue,
-  useTransform,
-  useMotionTemplate,
-} from "framer-motion";
-import type { NextPage } from "next";
-import Link from "next/link";
-import { useEffect } from "react";
-import { Fragment } from "react";
+'use client';
 
-export let clamp = (number: number, min: number, max: number) =>
-  Math.min(Math.max(number, min), max);
+import { useEffect, useState } from 'react';
 
-export function useBoundedScroll(bounds: number) {
-  let { scrollY } = useScroll();
-  let scrollYBounded = useMotionValue(0);
-  let scrollYBoundedProgress = useTransform(
-    scrollYBounded,
-    [0, bounds],
-    [0, 1]
-  );
+const navLinks = [
+  { label: 'About', href: '#about' },
+  { label: 'Work', href: '#work' },
+  { label: 'Contact', href: '#contact' },
+];
+
+export default function Header() {
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    return scrollY.onChange((current) => {
-      let previous = scrollY.getPrevious();
-      let diff = current - previous;
-      let newScrollYBounded = scrollYBounded.get() + diff;
-
-      scrollYBounded.set(clamp(newScrollYBounded, 0, bounds));
-    });
-  }, [bounds, scrollY, scrollYBounded]);
-
-  return { scrollYBounded, scrollYBoundedProgress };
-}
-
-const Home: NextPage = () => {
-  let { scrollYBoundedProgress } = useBoundedScroll(500);
-  let height = useTransform(scrollYBoundedProgress, [0, 1], [80, 50]);
-  let opacity = useTransform(scrollYBoundedProgress, [0, 1], [1, 0]);
-  let scale = useTransform(scrollYBoundedProgress, [0, 1], [1, 0.9]);
+    const onScroll = () => setScrolled(window.scrollY > 10);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   return (
-    <Fragment>
-
-      <div className="mx-auto flex w-full max-w-7xl flex-1 overflow-hidden text-slate-600">
-        <div className="z-10 flex-1">
-          <motion.header
-            style={{
-              height,
-              backgroundColor: useMotionTemplate`rgb(255,255,255 / ${useTransform(
-                scrollYBoundedProgress,
-                [0, 1],
-                [1, 0.1]
-              )})`,
-            }}
-            className="flex fixed inset-x-0 shadow-md backdrop-blur-md h-20"
+    <header
+      className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
+        scrolled
+          ? 'bg-white/80 backdrop-blur-md border-b border-slate-200/60'
+          : 'bg-transparent border-b border-transparent'
+      }`}
+    >
+      <div className="mx-auto max-w-5xl px-6 lg:px-8">
+        <div className="flex h-16 items-center justify-between">
+          <a
+            href="#top"
+            className="text-sm font-semibold tracking-tight text-slate-900"
           >
-            <div className="mx-auto flex max-w-7xl px-4 w-full items-center justify-between ">
-              <motion.p
-                style={{ scale }}
-                className="flex origin-left items-center text-xl font-semibold uppercase"
+            Philani Ncube
+          </a>
+          <nav className="flex items-center gap-8">
+            {navLinks.map((link) => (
+              <a
+                key={link.href}
+                href={link.href}
+                className="text-sm text-slate-500 hover:text-slate-900 transition-colors"
               >
-
-                <span className="-ml-1 text-xl tracking-[-.075em]">
-                  Philani Ncube
-                </span>
-              </motion.p>
-              <motion.nav
-                style={{ opacity }}
-                className="flex space-x-4 text-xs font-medium text-slate-400"
-              >
-                <Link href="/#journey">Journey</Link>
-                <Link href="/projects">Projects</Link>
-                <Link href="/contact">Contact</Link>
-              </motion.nav>
-            </div>
-          </motion.header>
+                {link.label}
+              </a>
+            ))}
+          </nav>
         </div>
       </div>
-    </Fragment>
+    </header>
   );
-};
-
-export default Home;
+}
